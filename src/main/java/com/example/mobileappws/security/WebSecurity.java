@@ -43,6 +43,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 				.antMatchers(HttpMethod.DELETE,"/users/**").hasRole("ACADEMICIAN") //here is for using role
 														  //.hasAuthority("DELETE_AUTHORITY)
 														  //hasAnyroleorauthority  for more than one role or authority
+				.antMatchers(HttpMethod.POST,"/courses/**").hasRole("ACADEMICIAN") //only academician can create course
+				.antMatchers(HttpMethod.PUT,"/courses/**").hasRole("ACADEMICIAN")
 				.anyRequest().authenticated().and().
 				addFilter(getAuthenticationFilter())
 				.addFilter(new AuthorizationFilter(authenticationManager(),userRepository))

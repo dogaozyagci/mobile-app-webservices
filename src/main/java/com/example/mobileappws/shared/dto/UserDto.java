@@ -18,6 +18,7 @@ public class UserDto implements Serializable{
 	private Boolean emailVerificationStatus;
 	private List<AddressDTO> addresses;
 	private Collection<String> roles;
+	private Collection<CourseDto> courses;
 	
 	public UserDto() {
 		// TODO Auto-generated constructor stub
@@ -92,6 +93,12 @@ public class UserDto implements Serializable{
 
 	public void setRoles(Collection<String> roles) {
 		this.roles = roles;
+	}
+	public Collection<CourseDto> getCourses() {
+		return courses;
+	}
+	public void setCourses(Collection<CourseDto> courses) {
+		this.courses = courses;
 	}
 	
 	

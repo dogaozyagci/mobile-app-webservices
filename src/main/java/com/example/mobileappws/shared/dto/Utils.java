@@ -29,6 +29,10 @@ public class Utils {
 		return generateRandomString(length);
 	}
 	
+	public String generateCourseId(int length) {
+		return generateRandomString(length);
+	}
+	
 	
 	private String generateRandomString(int length)
 	{
@@ -38,6 +42,7 @@ public class Utils {
 		}
 		return new String(returnValue);
 	}
+	
 	
 	public static boolean hasTokenExpired(String token) {
 		Claims claims=Jwts.parser()

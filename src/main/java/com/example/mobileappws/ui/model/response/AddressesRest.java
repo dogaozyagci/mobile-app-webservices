@@ -1,6 +1,5 @@
 package com.example.mobileappws.ui.model.response;
 
-import com.example.mobileappws.shared.dto.UserDto;
 
 public class AddressesRest {
 	private String addressId;

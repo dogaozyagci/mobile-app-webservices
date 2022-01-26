@@ -37,8 +37,7 @@ public class UserEntity implements Serializable {
 	
 	@Column(nullable=false)
 	private String encryptedPassword;
-	
-	
+
 	private String emailVerificationToken;
 	
 	@Column(nullable=false,columnDefinition = "boolean default false")
@@ -52,6 +51,12 @@ public class UserEntity implements Serializable {
 			joinColumns = @JoinColumn(name="users_id",referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name="roles_id",referencedColumnName="id") )
 	private Collection<RoleEntity> roles;
+	
+	
+	
+	@ManyToMany(mappedBy = "users")
+	private Collection<CourseEntity> courses;
+	
 	
 	public long getId() {
 		return id;
@@ -132,6 +137,17 @@ public class UserEntity implements Serializable {
 	public void setRoles(Collection<RoleEntity> roles) {
 		this.roles = roles;
 	}
+
+	public Collection<CourseEntity> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Collection<CourseEntity> courses) {
+		this.courses = courses;
+	}
+
+
+	
 
 	
 	
