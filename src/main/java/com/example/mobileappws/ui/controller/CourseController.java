@@ -1,13 +1,17 @@
 package com.example.mobileappws.ui.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -78,6 +82,55 @@ public class CourseController {
 		
 		return returnValue; 
 	}
+	
+	
+	@PutMapping(path="/{id}/deleteStudent")
+	public CourseRest deleteStudentFromCourse(@RequestBody CourseRequestModel courseDetails,@PathVariable String id) 
+	{
+		CourseRest returnValue=new CourseRest();
+		
+		if(courseDetails.getCourseName().isEmpty()) throw new CourseServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+		
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.getConfiguration()
+        .setMatchingStrategy(MatchingStrategies.STRICT); //it has to match with perfectly matching names
+		
+		CourseDto courseDto=modelMapper.map(courseDetails, CourseDto.class);
+		
+		CourseDto updatedCourse=courseService.deleteStudentFromCourse(courseDto,id);
+		
+		returnValue=modelMapper.map(updatedCourse, CourseRest.class);
+		
+		return returnValue; 
+	}
+	
+	@GetMapping(path="/{id}/getParticipants")
+	public List<UserRest> getParticipantsOfTheCourse(@PathVariable String id) 
+	{
+		List<UserRest> returnValue=new ArrayList<>();
+		
+		
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.getConfiguration()
+        .setMatchingStrategy(MatchingStrategies.STRICT); //it has to match with perfectly matching names
+		
+	/*	CourseDto courseDto=modelMapper.map(courseDetails, CourseDto.class);
+		
+		CourseDto updatedCourse=courseService.deleteStudentFromCourse(courseDto,id);
+		
+		returnValue=modelMapper.map(updatedCourse, CourseRest.class);*/
+		
+		return returnValue; 
+	}
+		
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

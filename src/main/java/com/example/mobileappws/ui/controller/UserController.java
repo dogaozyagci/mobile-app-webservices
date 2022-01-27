@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -24,12 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mobileappws.exceptions.UserServiceException;
 import com.example.mobileappws.service.AddressService;
+import com.example.mobileappws.service.CourseService;
 import com.example.mobileappws.service.UserService;
 import com.example.mobileappws.shared.dto.AddressDTO;
+import com.example.mobileappws.shared.dto.CourseDto;
 import com.example.mobileappws.shared.dto.Roles;
 import com.example.mobileappws.shared.dto.UserDto;
 import com.example.mobileappws.ui.model.request.UserDetailsRequestModel;
 import com.example.mobileappws.ui.model.response.AddressesRest;
+import com.example.mobileappws.ui.model.response.CourseRest;
 import com.example.mobileappws.ui.model.response.ErrorMessages;
 import com.example.mobileappws.ui.model.response.OperationStatusModel;
 import com.example.mobileappws.ui.model.response.RequestOperationName;
@@ -43,6 +47,8 @@ public class UserController {
 	UserService userService;
 	@Autowired
 	AddressService addressService;
+	@Autowired
+	CourseService courseService;
 	
 	
 	//@PostAuthorize("hasRole('ACADEMICIAN') or returnObject.userId==principal.userId")
@@ -164,6 +170,51 @@ public class UserController {
 	}
 	
 	//@CrossOrigin(origins="*") veya belirli port
+	
+	
+	@PreAuthorize("hasRole('ACADEMICIAN') or #userId==principal.userId")
+	@GetMapping(path="/{userId}/courses")
+	public List<CourseRest> getMyCourses(@PathVariable String userId) 
+	{
+		List<CourseRest> returnValue=new ArrayList<>();
+		
+		ModelMapper modelMapper=new ModelMapper();
+		modelMapper.getConfiguration()
+        .setMatchingStrategy(MatchingStrategies.STRICT);
+		
+		
+		
+		
+		List<CourseDto> updatedCourses=courseService.getMyCourses(userId);
+
+		
+		for(CourseDto courseDto:updatedCourses) {
+			
+			returnValue.add(modelMapper.map(courseDto, CourseRest.class));
+			
+			
+			
+		}
+		
+		
+		
+		
+		return returnValue; 
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

@@ -40,7 +40,6 @@ public class CourseServiceImpl implements CourseService {
 				
 				
 				
-				
 				ModelMapper modelMapper=new ModelMapper();
 				
 				
@@ -83,7 +82,7 @@ public class CourseServiceImpl implements CourseService {
 		
 		if(courseRepository.findByCourseName(course.getCourseName())==null)
 		{
-		throw new RuntimeException("Record not exists.");
+		throw new RuntimeException("Course not exists.");
 		}
 		CourseEntity courseDetails=courseRepository.findByCourseName(course.getCourseName());
 		
@@ -106,6 +105,52 @@ public class CourseServiceImpl implements CourseService {
 		
 		CourseDto returnValue=modelMapper.map(updatedCourse, CourseDto.class);
 
+		return returnValue;
+	}
+
+	@Override
+	public CourseDto deleteStudentFromCourse(CourseDto course, String studentId) {
+		
+		CourseEntity courseDetails=courseRepository.findByCourseName(course.getCourseName());
+		UserEntity deletingUser=userRepository.findByUserId(studentId);
+		if(courseDetails.getCourseName()==null)
+		{
+		throw new RuntimeException("Course not exists.");
+		}
+		if(!courseDetails.getUsers().contains(deletingUser)) {
+			throw new RuntimeException("Student not exists in the course.");
+		}
+		ModelMapper modelMapper=new ModelMapper();
+		
+		courseDetails.getUsers().remove(deletingUser);
+		
+		CourseEntity updatedCourse=courseRepository.save(courseDetails);
+		CourseDto returnValue=modelMapper.map(updatedCourse, CourseDto.class);
+		
+		return returnValue;
+	}
+
+	@Override
+	public List<CourseDto> getMyCourses(String userId) {
+		
+		List<CourseDto> returnValue=new ArrayList<>();
+		
+		UserEntity userEntity=userRepository.findByUserId(userId);
+		
+		List<CourseEntity> courseEntities=courseRepository.getCoursesByUserId(userEntity.getId());
+		
+		
+		ModelMapper modelMapper=new ModelMapper();
+		
+		for(CourseEntity courseEntity : courseEntities) {
+			
+			returnValue.add(modelMapper.map(courseEntity, CourseDto.class));
+			
+		}
+		
+		
+		
+		
 		return returnValue;
 	}
 
